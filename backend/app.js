@@ -1,7 +1,6 @@
 #!/usr/bin/node
 
 const express = require('express');
-path = require('path');
 const app = express();
 // Disable caching FIRST (for development only)
 app.use((req, res, next) => {
