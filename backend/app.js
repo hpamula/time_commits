@@ -1,18 +1,19 @@
 #!/usr/bin/node
 
 const express = require('express');
+const path = require('path');
 const app = express();
 // Disable caching FIRST (for development only)
 app.use((req, res, next) => {
   res.set('Cache-Control', 'no-store');
   next();
 });
-// app.use(require('morgan')('dev'));
-// app.use(express.json()); // for REST API
-// app.use(express.urlencoded({ extended: false })); // for classic HTML forms
+app.use(express.json());
+app.use(express.static(path.join(__dirname, '../frontend')));
 
-app.get('/', (req, res) => {
-  res.send('hello from the backend');
+app.post('/api/respond', (req, res) => {
+  console.log('Client sent:', req.body);
+  res.json({ message: 'Got: ' + req.body.action });
 });
 app.use((req, res) => {res.status(404).send(`<h1>Page does not exist</h1>`)});
 
