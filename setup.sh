@@ -5,5 +5,5 @@ set -e
 # sudo apt install nodejs npm
 
 cd backend
-npm install express morgan
+npm install express
 # node app.js

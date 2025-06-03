@@ -1,4 +1,4 @@
-async function sendJSON(route, data) {
+async function sendJSON(route, data={}) {
   try {
     const res = await fetch(route, {
       method: 'POST',
@@ -15,17 +15,16 @@ async function sendJSON(route, data) {
     return { error: 'Network or parsing error' };
   }
 }
+function addButton(text, onClick) {
+  const btn = document.createElement('button');
+  btn.textContent = text;
+  btn.onclick = onClick;
+  document.body.insertBefore(btn, document.currentScript);
+}
 
-const btn1 = document.createElement('button');
-btn1.textContent = 'Send + wait for response';
-btn1.onclick = async () => {
-  const response = await sendJSON('/api/respond', { action: 'btn1 clicked' });
-  btn1.textContent = response.message || 'No message';
-};
-const btn2 = document.createElement('button');
-btn2.textContent = 'Send + don’t wait';
-btn2.onclick = () => {
-  sendJSON('/api/respond', { action: 'btn2 clicked' });
-};
-document.body.appendChild(btn1);
-document.body.appendChild(btn2);
+addButton('Log in web console server time', async () => {
+  console.log(await sendJSON('/api/activity'));
+});
+addButton('Send and log in web console', async () => {
+  console.log(await sendJSON('/api/activity', { activity: 'work', time: new Date().toISOString() }));
+});

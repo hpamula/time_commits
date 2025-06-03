@@ -17,3 +17,8 @@
   color: var(--main-font);
   outline: none;
 }
+button {
+  padding: 10px;
+  margin: 10px;
+  border: solid;
+}
