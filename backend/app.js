@@ -11,6 +11,9 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
+app.get('/api/activity', (req, res) => {
+  res.json({ 'server time': new Date().toISOString() });
+});
 app.post('/api/activity', (req, res) => {
   res.json({ got: req.body, 'server time': new Date().toISOString() });
 });

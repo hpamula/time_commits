@@ -1,10 +1,6 @@
-async function sendJSON(route, data={}) {
+async function sendJSON(route, options) {
   try {
-    const res = await fetch(route, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
+    const res = await fetch(route, options);
     if (!res.ok) {
       console.error(`Server error: ${res.status} ${res.statusText}`);
       return { error: `Server error: ${res.status}` };
@@ -15,16 +11,35 @@ async function sendJSON(route, data={}) {
     return { error: 'Network or parsing error' };
   }
 }
-function addButton(text, onClick) {
-  const btn = document.createElement('button');
-  btn.textContent = text;
-  btn.onclick = onClick;
-  document.body.insertBefore(btn, document.currentScript);
+async function post(route, data) {
+  return sendJSON(route, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+}
+async function get(route) {
+  return sendJSON(route, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+function add(element, args) {
+  const e = document.createElement(element);
+  Object.assign(e, args);
+  document.body.insertBefore(e, document.currentScript);
+  return e;
 }
 
-addButton('Log in web console server time', async () => {
-  console.log(await sendJSON('/api/activity'));
+add('button', {
+  textContent: 'Log in web console server time',
+  onclick: async () => { console.log(await get('/api/activity')); }
 });
-addButton('Send and log in web console', async () => {
-  console.log(await sendJSON('/api/activity', { activity: 'work', time: new Date().toISOString() }));
+add('button', {
+  textContent: 'Send and log in web console',
+  onclick: async () => {
+    console.log(await post('/api/activity',
+      { activity: 'work', time: new Date().toISOString() }
+    ));
+  }
 });
